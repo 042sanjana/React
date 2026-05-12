@@ -1,0 +1,110 @@
+.expense-chart-container {
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+
+  margin-top: 30px;
+
+  width: fit-content;
+
+  animation: fadeIn 0.4s ease;
+}
+
+.expense-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.expense-header h2 {
+
+  color: #1e293b;
+
+  font-size: 24px;
+
+  font-weight: 700;
+}
+
+.expense-header select {
+
+  padding: 10px 14px;
+
+  border-radius: 10px;
+
+  border: 1px solid #dbeafe;
+
+  background: #f8fafc;
+
+  font-size: 14px;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+.expense-header select:focus {
+
+  border-color: #2563eb;
+}
+
+.no-data {
+
+  text-align: center;
+
+  color: #64748b;
+
+  padding: 40px;
+
+  font-size: 16px;
+}
+
+.recharts-wrapper {
+
+  margin: auto;
+}
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 600px) {
+
+  .expense-chart-container {
+
+    width: 100%;
+
+    overflow-x: auto;
+  }
+
+  .expense-header {
+
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .expense-header h2 {
+
+    font-size: 20px;
+  }
+}

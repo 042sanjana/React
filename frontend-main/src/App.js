@@ -9,10 +9,10 @@ import {
 
 // EXISTING PAGES
 import Dashboard from "./pages/Dashboard";
-import Balance from "./pages/Balance";
+
 import Credit from "./pages/Credit";
 import Debit from "./pages/Debit";
-import History from "./pages/History";
+
 import Profile from "./pages/Profile";
 
 // EXISTING COMPONENTS
@@ -38,13 +38,15 @@ import "./Login.css";
 import "./components/WalletCard.css";
 import "./pages/Profile.css";
 import "./pages/Dashboard.css";
-import "./pages/History.css";
+
 
 // NEW CSS
 import "./components/Navbar.css";
 import "./components/TransferForm.css";
 import "./components/TransactionList.css";
 import "./components/ChartSection.css";
+import ExpenseChart from "./pages/ExpenseChart";
+
 
 function TransactionsPage() {
 
@@ -118,13 +120,13 @@ function Layout() {
 
           <Route path="/dashboard" element={<Dashboard />} />
 
-          <Route path="/balance" element={<Balance />} />
+<Route path="/expenseChart" element={<ExpenseChart />} />
 
           <Route path="/credit" element={<Credit />} />
 
           <Route path="/debit" element={<Debit />} />
 
-          <Route path="/history" element={<History />} />
+
           <Route
             path="/transaction"
             element={<Transaction />}

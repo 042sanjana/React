@@ -12,14 +12,11 @@ export default function Sidebar() {
 
       <Link to="/dashboard">🏠 Dashboard</Link>
 
-      <Link to="/balance">💰 Balance</Link>
-
       <Link to="/credit">➕ Credit</Link>
 
       <Link to="/debit">💸 Debit</Link>
 
-      <Link to="/history">📜 History</Link>
-
+<Link to="/expenseChart"> Expenses</Link>
       <Link to="/profile">👤 Profile</Link>
 
       <Link to="/Transfer ">💳 Transfer</Link>

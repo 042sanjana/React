@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 import WalletCard from "../components/WalletCard";
-import TransactionList from "../components/TransactionList";
 
 import {
   getWallet,
-  getUserProfile,
-
+  getUserProfile
 } from "../api/api";
 
 import "./Dashboard.css";
@@ -17,39 +15,33 @@ export default function Dashboard() {
 
   const [user, setUser] = useState(null);
 
-  const [transactions, setTransactions] = useState([]);
-
-  const userId = localStorage.getItem("userId");
-
   useEffect(() => {
 
     const loadDashboard = async () => {
 
       try {
 
-        const walletData = await getWallet(userId);
+        // FETCH WALLET
+        const walletData = await getWallet();
 
+        // FETCH USER PROFILE
         const profileData = await getUserProfile();
-
-        const txData = await getTransactions();
 
         setWallet(walletData);
 
         setUser(profileData);
 
-        setTransactions(txData);
-
       } catch (err) {
 
-        console.log(err);
+        console.log("Dashboard Error:", err);
       }
     };
 
     loadDashboard();
 
-  }, [userId]);
+  }, []);
 
-  /* ================= LOGOUT ================= */
+  /* LOGOUT */
 
   const handleLogout = () => {
 
@@ -57,7 +49,7 @@ export default function Dashboard() {
 
     localStorage.removeItem("userId");
 
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   return (
@@ -69,13 +61,19 @@ export default function Dashboard() {
       <div className="dashboard-header">
 
         <div>
+
           <h1 className="dashboard-title">
-            Welcome {user?.fullName}
+            Welcome {user?.fullName || "User"}
           </h1>
+
+          <p className="dashboard-subtitle">
+            {user?.email}
+          </p>
 
           <p className="dashboard-subtitle">
             Manage your wallet and transactions
           </p>
+
         </div>
 
         <button
@@ -91,19 +89,7 @@ export default function Dashboard() {
 
       <div className="dashboard-wallet">
 
-        <WalletCard balance={wallet?.balance} />
-
-      </div>
-
-      {/* TRANSACTIONS */}
-
-      <div className="dashboard-transactions">
-
-        <h2 className="section-title">
-          Recent Transactions
-        </h2>
-
-        <TransactionList transactions={transactions} />
+        <WalletCard balance={wallet?.balance || 0} />
 
       </div>
 

@@ -11,7 +11,7 @@ const SetPin=()=>{
     return;
     }
     localStorage.setItem("pin", pin);
-    nav("/walletDashboard");
+    nav("/dashboard");
     };
     return(
     <div className="auth-container">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { transferMoney, getWallet } from "../api/api";
 import "./Transfer.css";
 
@@ -8,14 +8,29 @@ export default function Transfer() {
     senderUserId: localStorage.getItem("userId"),
     receiverUserId: "",
     amount: "",
-    description: ""
+    description: "Shopping"
   });
 
-  const [walletBalance, setWalletBalance] = useState(null);
+  const [walletBalance, setWalletBalance] = useState(0);
 
   const [loading, setLoading] = useState(false);
 
+  const expenseOptions = [
+    "Shopping",
+    "Food",
+    "Dress",
+    "Travel",
+    "Bills",
+    "Recharge",
+    "Movies",
+    "Medical",
+    "Education",
+    "Entertainment",
+    "Others"
+  ];
+
   const handleChange = (e) => {
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -23,21 +38,51 @@ export default function Transfer() {
   };
 
   const loadWallet = async () => {
+
     try {
+
       const wallet = await getWallet();
+
       setWalletBalance(wallet.balance);
+
     } catch (err) {
+
       console.log(err);
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
+
     loadWallet();
+
   }, []);
 
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+
+    // VALIDATIONS
+
+    if (!formData.receiverUserId) {
+
+      alert("Enter Receiver User ID");
+      return;
+    }
+
+    if (
+      !formData.amount ||
+      Number(formData.amount) <= 0
+    ) {
+
+      alert("Enter valid amount");
+      return;
+    }
+
+    if (Number(formData.amount) > walletBalance) {
+
+      alert("Insufficient Balance");
+      return;
+    }
 
     try {
 
@@ -49,14 +94,15 @@ export default function Transfer() {
 
       console.log(response);
 
-      // ✅ REFRESH BALANCE
+      // REFRESH BALANCE
       await loadWallet();
 
+      // RESET FORM
       setFormData({
         senderUserId: localStorage.getItem("userId"),
         receiverUserId: "",
         amount: "",
-        description: ""
+        description: "Shopping"
       });
 
     } catch (err) {
@@ -72,6 +118,7 @@ export default function Transfer() {
   };
 
   return (
+
     <div className="transfer-page">
 
       <div className="transfer-card">
@@ -85,12 +132,16 @@ export default function Transfer() {
 
         <form onSubmit={handleSubmit}>
 
+          {/* SENDER ID */}
+
           <input
             type="number"
             name="senderUserId"
             value={formData.senderUserId}
             readOnly
           />
+
+          {/* RECEIVER ID */}
 
           <input
             type="number"
@@ -101,24 +152,43 @@ export default function Transfer() {
             required
           />
 
+          {/* AMOUNT */}
+
           <input
             type="number"
             name="amount"
-            placeholder="Amount"
+            placeholder="Enter Amount"
             value={formData.amount}
             onChange={handleChange}
             required
           />
 
-          <textarea
+          {/* EXPENSE CATEGORY */}
+
+          <select
             name="description"
-            placeholder="Description"
             value={formData.description}
             onChange={handleChange}
-          />
+            className="dropdown"
+          >
+
+            {expenseOptions.map((item, index) => (
+
+              <option key={index} value={item}>
+                {item}
+              </option>
+            ))}
+
+          </select>
+
+          {/* SUBMIT BUTTON */}
 
           <button type="submit">
-            {loading ? "Processing..." : "Transfer"}
+
+            {loading
+              ? "Processing..."
+              : "Transfer Money"}
+
           </button>
 
         </form>

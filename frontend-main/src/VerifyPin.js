@@ -12,7 +12,7 @@ const VerifyPin = () => {
 
   const handleVerify = () => {
     if (pin === savedPin) {
-      navigate("/walletDashboard", {
+      navigate("/dashboard", {
         state: {
           success: true,
           amount: location.state?.amount || 0

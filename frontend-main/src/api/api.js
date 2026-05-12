@@ -142,7 +142,7 @@ export const verifyPinAPI = async (pin) => {
 export const getTransactionHistory = async (walletId) => {
 
   const response = await fetch(
-    `http://localhost:8080/transactions/history/{userId}`,
+    `http://localhost:8080/transactions/history/${userId}`,
     {
       method: "GET",
       headers: {
