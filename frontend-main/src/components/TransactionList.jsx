@@ -1,46 +1,64 @@
-import React from "react";
-
+import React, { useState } from "react";
 import "./TransactionList.css";
 
-export default function TransactionList() {
+const TransactionList = ({ transactions = [] }) => {
 
-  const transactions = [
+  const [filterDate, setFilterDate] = useState("");
 
-    {
-      title: "Money Added",
-      amount: "+ ₹1000"
-    },
+  const filteredTransactions = transactions.filter((tx) => {
+    if (!filterDate) return true;
 
-    {
-      title: "Recharge",
-      amount: "- ₹299"
-    },
+    const txDate = new Date(tx.createdAt)
+      .toISOString()
+      .split("T")[0];
 
-    {
-      title: "Sent Money",
-      amount: "- ₹500"
-    }
-  ];
+    return txDate === filterDate;
+  });
 
   return (
+    <div className="transaction-list-container">
 
-    <div className="transaction-box">
+      <div className="transaction-header">
+        <h2>Transaction History</h2>
 
-      <h2>Recent Transactions</h2>
+        <input
+          type="date"
+          value={filterDate}
+          onChange={(e) => setFilterDate(e.target.value)}
+        />
+      </div>
 
-      {
-        transactions.map((item, index) => (
+      {filteredTransactions.length === 0 ? (
+        <p className="no-transactions">
+          No transactions found
+        </p>
+      ) : (
+        filteredTransactions.map((tx) => (
+          <div className="transaction-card" key={tx.id}>
 
-          <div className="transaction-item" key={index}>
+            <div>
+              <h3>₹ {tx.amount}</h3>
 
-            <span>{item.title}</span>
+              <p>{tx.description}</p>
+            </div>
 
-            <p>{item.amount}</p>
+            <div className="transaction-right">
+
+              <span className={tx.status}>
+                {tx.status}
+              </span>
+
+              <p>
+                {new Date(tx.createdAt).toLocaleString()}
+              </p>
+
+            </div>
 
           </div>
         ))
-      }
-
+      )}
     </div>
   );
-}
+};
+
+export default TransactionList;

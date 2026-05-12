@@ -5,7 +5,8 @@ import TransactionList from "../components/TransactionList";
 
 import {
   getWallet,
-  getUserProfile
+  getUserProfile,
+
 } from "../api/api";
 
 import "./Dashboard.css";
@@ -15,6 +16,8 @@ export default function Dashboard() {
   const [wallet, setWallet] = useState(null);
 
   const [user, setUser] = useState(null);
+
+  const [transactions, setTransactions] = useState([]);
 
   const userId = localStorage.getItem("userId");
 
@@ -28,9 +31,13 @@ export default function Dashboard() {
 
         const profileData = await getUserProfile();
 
+        const txData = await getTransactions();
+
         setWallet(walletData);
 
         setUser(profileData);
+
+        setTransactions(txData);
 
       } catch (err) {
 
@@ -96,7 +103,7 @@ export default function Dashboard() {
           Recent Transactions
         </h2>
 
-        <TransactionList />
+        <TransactionList transactions={transactions} />
 
       </div>
 

@@ -1,23 +1,48 @@
-.transaction-box{
-margin-top:30px;
-padding:25px;
-border-radius:24px;
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(15px);
-color:white;
+.transaction-list {
+  margin-top: 30px;
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
-.transaction-box h2{
-margin-bottom:20px;
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.transaction-item{
-display:flex;
-justify-content:space-between;
-padding:16px 0;
-border-bottom:1px solid rgba(255,255,255,0.08);
+.list-header input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
-.transaction-item:last-child{
-border-bottom:none;
-}
+table {
+  width: 100%; border-collapse: collapse;
+              }
+
+              th,
+              td {
+                padding: 14px;
+                text-align: center;
+              }
+
+              th {
+                background: #1e3c72;
+                color: white;
+              }
+
+              tr:nth-child(even) {
+                background: #f5f7fa;
+              }
+
+              .SUCCESS {
+                color: green;
+                font-weight: bold;
+              }
+
+              .FAILED {
+                color: red;
+                font-weight: bold;
+              }

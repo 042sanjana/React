@@ -22,6 +22,10 @@ export default function Sidebar() {
 
       <Link to="/profile">👤 Profile</Link>
 
+      <Link to="/Transfer ">💳 Transfer</Link>
+
+     <Link to="/Transaction ">💳 Transaction </Link>
+
     </div>
   );
 }

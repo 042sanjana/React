@@ -142,7 +142,7 @@ export const verifyPinAPI = async (pin) => {
 export const getTransactionHistory = async (walletId) => {
 
   const response = await fetch(
-    `http://localhost:8080/wallet/${walletId}/history`,
+    `http://localhost:8080/transactions/history/{userId}`,
     {
       method: "GET",
       headers: {
@@ -158,3 +158,55 @@ export const getTransactionHistory = async (walletId) => {
 
   return await response.json();
 };
+
+export const transferMoney = async (data) => {
+
+  const token = getToken();
+
+  const response = await fetch(
+    `${GATEWAY_URL}/transactions/transfer`,
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+
+      body: JSON.stringify(data),
+    }
+  );
+
+  if (!response.ok) {
+
+    const text = await response.text();
+
+    throw new Error(text || "Transfer failed");
+  }
+
+  return await response.json();
+};
+
+
+export const getTransferHistory = async (userId) => {
+
+  const response = await fetch(
+    `http://localhost:8080/transactions/history/${userId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch history");
+  }
+
+  return await response.json();
+};
+
+
+
