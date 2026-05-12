@@ -1,0 +1,138 @@
+.dashboard-page {
+  min-height: 100vh;
+
+  padding: 40px;
+
+  font-family: "Poppins", sans-serif;
+
+  background:
+    radial-gradient(circle at top left,
+      rgba(0, 162, 255, 0.20),
+      transparent 30%),
+
+    radial-gradient(circle at bottom right,
+      rgba(153, 0, 255, 0.18),
+      transparent 30%),
+
+    linear-gradient(
+      135deg,
+      #040816 0%,
+      #0b1026 45%,
+      #0d081b 100%
+    );
+}
+
+/* ================= HEADER ================= */
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 35px;
+
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.dashboard-title {
+  font-size: 40px;
+  font-weight: 700;
+  color: white;
+}
+
+.dashboard-subtitle {
+  margin-top: 8px;
+
+  color: rgba(255,255,255,0.7);
+
+  font-size: 15px;
+}
+
+/* ================= LOGOUT BUTTON ================= */
+
+.logout-btn {
+  padding: 14px 28px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #ef4444,
+    #dc2626
+  );
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 10px 25px rgba(239,68,68,0.30);
+}
+
+.logout-btn:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 15px 35px rgba(239,68,68,0.45);
+}
+
+/* ================= WALLET CARD ================= */
+
+.dashboard-wallet {
+  margin-bottom: 35px;
+}
+
+/* ================= TRANSACTIONS ================= */
+
+.dashboard-transactions {
+  padding: 30px;
+
+  border-radius: 24px;
+
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.35);
+}
+
+.section-title {
+  color: white;
+
+  font-size: 26px;
+  font-weight: 700;
+
+  margin-bottom: 25px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+  .dashboard-page {
+    padding: 20px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-title {
+    font-size: 32px;
+  }
+
+  .logout-btn {
+    width: 100%;
+  }
+}

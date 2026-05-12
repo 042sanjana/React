@@ -1,0 +1,130 @@
+.history-page {
+  min-height: 100vh;
+
+  padding: 40px;
+
+  font-family: "Poppins", sans-serif;
+
+  background:
+    radial-gradient(circle at top left,
+      rgba(0, 162, 255, 0.20),
+      transparent 30%),
+
+    radial-gradient(circle at bottom right,
+      rgba(153, 0, 255, 0.18),
+      transparent 30%),
+
+    linear-gradient(
+      135deg,
+      #040816 0%,
+      #0b1026 45%,
+      #0d081b 100%
+    );
+}
+
+.history-title {
+  color: white;
+
+  font-size: 38px;
+  font-weight: 700;
+
+  margin-bottom: 35px;
+}
+
+.history-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.history-card {
+  padding: 24px;
+
+  border-radius: 22px;
+
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(16px);
+
+  transition: 0.3s ease;
+}
+
+.history-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.30);
+}
+
+/* CREDIT */
+
+.history-card.CREDIT {
+  border-left: 6px solid #22c55e;
+}
+
+/* DEBIT */
+
+.history-card.DEBIT {
+  border-left: 6px solid #ef4444;
+}
+
+.history-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 14px;
+}
+
+.history-top h2 {
+  color: white;
+
+  font-size: 22px;
+}
+
+.amount {
+  color: white;
+
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.history-bottom {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  color: rgba(255,255,255,0.70);
+
+  font-size: 14px;
+}
+
+.empty-text {
+  color: white;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+
+  .history-page {
+    padding: 20px;
+  }
+
+  .history-title {
+    font-size: 30px;
+  }
+
+  .history-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .history-bottom {
+    flex-direction: column;
+  }
+}
