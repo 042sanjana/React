@@ -5,9 +5,14 @@ const GATEWAY_URL = "http://localhost:8080";
    HELPERS
 ====================================================== */
 
-const getToken = () => localStorage.getItem("token");
+const getToken = () =>
+  localStorage.getItem("token");
 
-const getUserId = () => localStorage.getItem("userId");
+const getUserId = () =>
+  localStorage.getItem("userId");
+
+const getEmail = () =>
+  localStorage.getItem("email");
 
 /* ======================================================
    REGISTER USER
@@ -15,25 +20,34 @@ const getUserId = () => localStorage.getItem("userId");
 
 export const registerUser = async (data) => {
 
-  const res = await fetch(`${BASE_URL}/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data),
-  });
+  const res = await fetch(
+    `${BASE_URL}/register`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type":
+          "application/json"
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!res.ok) {
 
     const text = await res.text();
 
-    throw new Error(text || "Registration Failed");
+    throw new Error(
+      text || "Registration Failed"
+    );
   }
 
   const result = await res.json();
 
   // SAVE TOKEN
-  localStorage.setItem("token", result.token);
+  localStorage.setItem(
+    "token",
+    result.token
+  );
 
   // FETCH PROFILE
   const profileRes = await fetch(
@@ -41,23 +55,34 @@ export const registerUser = async (data) => {
     {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${result.token}`,
+        "Content-Type":
+          "application/json",
+
+        Authorization:
+          `Bearer ${result.token}`,
       },
     }
   );
 
   if (profileRes.ok) {
 
-    const profile = await profileRes.json();
+    const profile =
+      await profileRes.json();
 
-    localStorage.setItem("userId", profile.userId);
+    localStorage.setItem(
+      "userId",
+      profile.userId
+    );
 
-    localStorage.setItem("email", profile.email);
+    localStorage.setItem(
+      "email",
+      profile.email
+    );
 
-    localStorage.setItem("fullName", profile.fullName);
-
-    console.log("REGISTER PROFILE:", profile);
+    localStorage.setItem(
+      "fullName",
+      profile.fullName
+    );
   }
 
   return result;
@@ -69,25 +94,33 @@ export const registerUser = async (data) => {
 
 export const loginUser = async (data) => {
 
-  const res = await fetch(`${BASE_URL}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data),
-  });
+  const res = await fetch(
+    `${BASE_URL}/login`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type":
+          "application/json"
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!res.ok) {
 
     const text = await res.text();
 
-    throw new Error(text || "Invalid Credentials");
+    throw new Error(
+      text || "Invalid Credentials"
+    );
   }
 
   const result = await res.json();
 
-  // SAVE TOKEN
-  localStorage.setItem("token", result.token);
+  localStorage.setItem(
+    "token",
+    result.token
+  );
 
   // FETCH PROFILE
   const profileRes = await fetch(
@@ -95,283 +128,337 @@ export const loginUser = async (data) => {
     {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${result.token}`,
+        "Content-Type":
+          "application/json",
+
+        Authorization:
+          `Bearer ${result.token}`,
       },
     }
   );
 
   if (profileRes.ok) {
 
-    const profile = await profileRes.json();
+    const profile =
+      await profileRes.json();
 
-    localStorage.setItem("userId", profile.userId);
+    localStorage.setItem(
+      "userId",
+      profile.userId
+    );
 
-    localStorage.setItem("email", profile.email);
+    localStorage.setItem(
+      "email",
+      profile.email
+    );
 
-    localStorage.setItem("fullName", profile.fullName);
-
-    console.log("LOGIN PROFILE:", profile);
+    localStorage.setItem(
+      "fullName",
+      profile.fullName
+    );
   }
 
   return result;
 };
 
 /* ======================================================
-   GET USER PROFILE
+   GET PROFILE
 ====================================================== */
 
-export const getUserProfile = async () => {
+export const getUserProfile =
+  async () => {
 
-  const token = getToken();
+    const response = await fetch(
+      `${GATEWAY_URL}/users/user/profile`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type":
+            "application/json",
 
-  const response = await fetch(
-    `${GATEWAY_URL}/users/user/profile`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+          Authorization:
+            `Bearer ${getToken()}`
+        },
+      }
+    );
+
+    if (!response.ok) {
+
+      const text =
+        await response.text();
+
+      throw new Error(text);
     }
-  );
 
-  if (!response.ok) {
+    const data =
+      await response.json();
 
-    const text = await response.text();
+    localStorage.setItem(
+      "userId",
+      data.userId
+    );
 
-    throw new Error(text);
-  }
+    localStorage.setItem(
+      "email",
+      data.email
+    );
 
-  const data = await response.json();
+    localStorage.setItem(
+      "fullName",
+      data.fullName
+    );
 
-  // SAVE PROFILE AGAIN
-  localStorage.setItem("userId", data.userId);
-
-  localStorage.setItem("email", data.email);
-
-  localStorage.setItem("fullName", data.fullName);
-
-  return data;
-};
+    return data;
+  };
 
 /* ======================================================
    GET WALLET
 ====================================================== */
 
-export const getWallet = async () => {
+export const getWallet =
+  async () => {
 
-  const token = getToken();
+    const response = await fetch(
+      `${GATEWAY_URL}/wallet/${getUserId()}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type":
+            "application/json",
 
-  const userId = getUserId();
+          Authorization:
+            `Bearer ${getToken()}`
+        },
+      }
+    );
 
-  const response = await fetch(
-    `${GATEWAY_URL}/wallet/${userId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+    if (!response.ok) {
+
+      const text =
+        await response.text();
+
+      throw new Error(text);
     }
-  );
 
-  if (!response.ok) {
-
-    const text = await response.text();
-
-    throw new Error(text);
-  }
-
-  return await response.json();
-};
+    return await response.json();
+  };
 
 /* ======================================================
    CREDIT MONEY
 ====================================================== */
 
-export const creditMoney = async (amount) => {
+export const creditMoney =
+  async (amount) => {
 
-  const token = getToken();
+    const response = await fetch(
+      `${GATEWAY_URL}/wallet/${getUserId()}/credit?amount=${amount}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
 
-  const userId = getUserId();
+          Authorization:
+            `Bearer ${getToken()}`
+        },
+      }
+    );
 
-  const response = await fetch(
-    `${GATEWAY_URL}/wallet/${userId}/credit?amount=${amount}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+    const text =
+      await response.text();
+
+    if (!response.ok) {
+
+      throw new Error(text);
     }
-  );
 
-  const text = await response.text();
-
-  if (!response.ok) {
-
-    throw new Error(text);
-  }
-
-  return text;
-};
+    return text;
+  };
 
 /* ======================================================
    DEBIT MONEY
 ====================================================== */
 
-export const debitMoney = async (amount) => {
+export const debitMoney =
+  async (amount) => {
 
-  const token = getToken();
+    const response = await fetch(
+      `${GATEWAY_URL}/wallet/${getUserId()}/debit?amount=${amount}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
 
-  const userId = getUserId();
+          Authorization:
+            `Bearer ${getToken()}`
+        },
+      }
+    );
 
-  const response = await fetch(
-    `${GATEWAY_URL}/wallet/${userId}/debit?amount=${amount}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+    const text =
+      await response.text();
+
+    if (!response.ok) {
+
+      throw new Error(text);
     }
-  );
 
-  const text = await response.text();
-
-  if (!response.ok) {
-
-    throw new Error(text);
-  }
-
-  return text;
-};
+    return text;
+  };
 
 /* ======================================================
    SET PIN
 ====================================================== */
 
-export const setPinAPI = async (pin) => {
+export const setPinAPI =
+  async (pin) => {
 
-  const response = await fetch(
-    `${GATEWAY_URL}/wallet/set-pin`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getToken()}`,
-      },
-      body: JSON.stringify({ pin }),
+    const response = await fetch(
+      `${GATEWAY_URL}/wallet/set-pin`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Authorization:
+            `Bearer ${getToken()}`
+        },
+
+        body: JSON.stringify({
+          email: getEmail(),
+          pin
+        }),
+      }
+    );
+
+    if (!response.ok) {
+
+      const text =
+        await response.text();
+
+      throw new Error(text);
     }
-  );
 
-  return response;
-};
+    return await response.text();
+  };
 
 /* ======================================================
    VERIFY PIN
 ====================================================== */
 
-export const verifyPinAPI = async (pin) => {
+export const verifyPinAPI =
+  async (pin) => {
 
-  const response = await fetch(
-    `${GATEWAY_URL}/wallet/verify-pin`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getToken()}`,
-      },
-      body: JSON.stringify({ pin }),
+    const response = await fetch(
+      `${GATEWAY_URL}/wallet/verify-pin`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Authorization:
+            `Bearer ${getToken()}`
+        },
+
+        body: JSON.stringify({
+          email: getEmail(),
+          pin
+        })
+      }
+    );
+
+    if (!response.ok) {
+
+      const text =
+        await response.text();
+
+      throw new Error(
+        text || "Invalid PIN"
+      );
     }
-  );
 
-  return response;
-};
+    return await response.text();
+  };
 
 /* ======================================================
    TRANSFER MONEY
 ====================================================== */
 
-export const transferMoney = async (data) => {
+export const transferMoney =
+  async (data) => {
 
-  const token = getToken();
+    const response = await fetch(
+      `${GATEWAY_URL}/transactions/transfer`,
+      {
+        method: "POST",
 
-  const response = await fetch(
-    `${GATEWAY_URL}/transactions/transfer`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Authorization:
+            `Bearer ${getToken()}`
+        },
+
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+
+      const text =
+        await response.text();
+
+      throw new Error(
+        text || "Transfer Failed"
+      );
     }
-  );
 
-  if (!response.ok) {
-
-    const text = await response.text();
-
-    throw new Error(text || "Transfer Failed");
-  }
-
-  return await response.json();
-};
+    return await response.json();
+  };
 
 /* ======================================================
-   GET TRANSFER HISTORY
+   TRANSFER HISTORY
 ====================================================== */
 
-export const getTransferHistory = async (userId) => {
+export const getTransferHistory =
+  async () => {
 
-  const response = await fetch(
-    `${GATEWAY_URL}/transactions/history/${userId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getToken()}`
+    const email =
+      encodeURIComponent(
+        getEmail()
+      );
+
+    const response = await fetch(
+      `${GATEWAY_URL}/transactions/history/${email}`,
+      {
+        method: "GET",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Authorization:
+            `Bearer ${getToken()}`
+        }
       }
+    );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Failed to fetch history"
+      );
     }
-  );
 
-  if (!response.ok) {
-
-    throw new Error("Failed to fetch history");
-  }
-
-  return await response.json();
-};
+    return await response.json();
+  };
 
 /* ======================================================
-   GET TRANSACTION HISTORY
-====================================================== */
-
-export const getTransactionHistory = async (userId) => {
-
-  const response = await fetch(
-    `${GATEWAY_URL}/transactions/history/${userId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getToken()}`
-      }
-    }
-  );
-
-  if (!response.ok) {
-
-    throw new Error("Failed to fetch transaction history");
-  }
-
-  return await response.json();
-};
-
-/* ======================================================
-   LOGOUT
+   GET USER BY EMAIL
 ====================================================== */
 
 export const logoutUser = () => {

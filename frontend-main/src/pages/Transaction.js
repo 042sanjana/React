@@ -1,23 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { getTransferHistory } from "../api/api";
+
+import {
+  getTransferHistory
+} from "../api/api";
+
 import "./Transaction.css";
 
 function Transaction() {
 
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [transactions, setTransactions] =
+    useState([]);
 
-  const userId = localStorage.getItem("userId");
+  const [loading, setLoading] =
+    useState(true);
+
+  // =========================
+  // GET LOGGED IN EMAIL
+  // =========================
+
+  const email =
+    localStorage.getItem("email");
+
+  // =========================
+  // LOAD HISTORY
+  // =========================
 
   useEffect(() => {
+
     loadHistory();
+
   }, []);
 
   const loadHistory = async () => {
 
     try {
 
-      const data = await getTransferHistory(userId);
+      const data =
+        await getTransferHistory(email);
 
       setTransactions(data);
 
@@ -59,7 +78,10 @@ function Transaction() {
 
             {transactions.map((tx) => (
 
-              <div className="history-card" key={tx.id}>
+              <div
+                className="history-card"
+                key={tx.id}
+              >
 
                 <div className="history-top">
 
@@ -75,8 +97,12 @@ function Transaction() {
 
                   </div>
 
-                  <span className={`status ${tx.status}`}>
+                  <span
+                    className={`status ${tx.status}`}
+                  >
+
                     {tx.status}
+
                   </span>
 
                 </div>
@@ -84,17 +110,27 @@ function Transaction() {
                 <div className="history-bottom">
 
                   <p>
-                    Sender ID:
-                    <strong> {tx.senderUserId}</strong>
+                    Sender Email:
+                    <strong>
+                      {" "}
+                      {tx.senderEmail}
+                    </strong>
                   </p>
 
                   <p>
-                    Receiver ID:
-                    <strong> {tx.receiverUserId}</strong>
+                    Receiver Email:
+                    <strong>
+                      {" "}
+                      {tx.receiverEmail}
+                    </strong>
                   </p>
 
                   <p>
-                    {new Date(tx.createdAt).toLocaleString()}
+                    {
+                      new Date(
+                        tx.createdAt
+                      ).toLocaleString()
+                    }
                   </p>
 
                 </div>

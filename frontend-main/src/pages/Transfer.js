@@ -1,19 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { transferMoney, getWallet } from "../api/api";
+
+import {
+  transferMoney,
+  getWallet
+} from "../api/api";
+
 import "./Transfer.css";
 
 export default function Transfer() {
 
+  const loggedInEmail =
+    localStorage.getItem("email");
+
   const [formData, setFormData] = useState({
-    senderUserId: localStorage.getItem("userId"),
-    receiverUserId: "",
+    senderEmail: loggedInEmail || "",
+    receiverEmail: "",
     amount: "",
     description: "Shopping"
   });
 
-  const [walletBalance, setWalletBalance] = useState(0);
+  const [walletBalance, setWalletBalance] =
+    useState(0);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
   const expenseOptions = [
     "Shopping",
@@ -29,6 +39,10 @@ export default function Transfer() {
     "Others"
   ];
 
+  // =========================
+  // HANDLE INPUT
+  // =========================
+
   const handleChange = (e) => {
 
     setFormData({
@@ -36,6 +50,10 @@ export default function Transfer() {
       [e.target.name]: e.target.value
     });
   };
+
+  // =========================
+  // LOAD WALLET
+  // =========================
 
   const loadWallet = async () => {
 
@@ -57,17 +75,72 @@ export default function Transfer() {
 
   }, []);
 
+  // =========================
+  // EMAIL VALIDATION
+  // =========================
+
+  const validateEmail = (email) => {
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      .test(email);
+  };
+
+  // =========================
+  // SUBMIT
+  // =========================
+
   const handleSubmit = async (e) => {
 
     e.preventDefault();
 
-    // VALIDATIONS
+    // sender validation
 
-    if (!formData.receiverUserId) {
+    if (
+      formData.senderEmail !== loggedInEmail
+    ) {
 
-      alert("Enter Receiver User ID");
+      alert(
+        "Sender email must be your registered email"
+      );
+
       return;
     }
+
+    // receiver validation
+
+    if (!formData.receiverEmail) {
+
+      alert("Enter receiver email");
+
+      return;
+    }
+
+    if (
+      !validateEmail(
+        formData.receiverEmail
+      )
+    ) {
+
+      alert("Enter valid receiver email");
+
+      return;
+    }
+
+    // same email check
+
+    if (
+      formData.senderEmail ===
+      formData.receiverEmail
+    ) {
+
+      alert(
+        "Sender and receiver cannot be same"
+      );
+
+      return;
+    }
+
+    // amount validation
 
     if (
       !formData.amount ||
@@ -75,12 +148,19 @@ export default function Transfer() {
     ) {
 
       alert("Enter valid amount");
+
       return;
     }
 
-    if (Number(formData.amount) > walletBalance) {
+    // balance validation
+
+    if (
+      Number(formData.amount) >
+      walletBalance
+    ) {
 
       alert("Insufficient Balance");
+
       return;
     }
 
@@ -88,28 +168,48 @@ export default function Transfer() {
 
       setLoading(true);
 
-      const response = await transferMoney(formData);
+      // =========================
+      // TRANSFER API
+      // =========================
+
+      const response =
+        await transferMoney({
+          senderEmail:
+            formData.senderEmail,
+
+          receiverEmail:
+            formData.receiverEmail,
+
+          amount:
+            Number(formData.amount),
+
+          description:
+            formData.description
+        });
+
+      console.log("TRANSFER SUCCESS:", response);
 
       alert("Transfer Successful");
 
-      console.log(response);
-
-      // REFRESH BALANCE
+      // refresh wallet
       await loadWallet();
 
-      // RESET FORM
+      // reset form
       setFormData({
-        senderUserId: localStorage.getItem("userId"),
-        receiverUserId: "",
+        senderEmail: loggedInEmail || "",
+        receiverEmail: "",
         amount: "",
         description: "Shopping"
       });
 
     } catch (err) {
 
-      console.log(err);
+      console.log("TRANSFER ERROR:", err);
 
-      alert("Transfer Failed");
+      alert(
+        err.message ||
+        "Transfer Failed"
+      );
 
     } finally {
 
@@ -123,31 +223,38 @@ export default function Transfer() {
 
       <div className="transfer-card">
 
-        <h2>Money Transfer</h2>
+        <h2>
+          Money Transfer
+        </h2>
 
         <div className="balance-box">
+
           Current Balance:
-          <span> ₹ {walletBalance}</span>
+
+          <span>
+            ₹ {walletBalance}
+          </span>
+
         </div>
 
         <form onSubmit={handleSubmit}>
 
-          {/* SENDER ID */}
+          {/* SENDER EMAIL */}
 
           <input
-            type="number"
-            name="senderUserId"
-            value={formData.senderUserId}
+            type="email"
+            name="senderEmail"
+            value={formData.senderEmail}
             readOnly
           />
 
-          {/* RECEIVER ID */}
+          {/* RECEIVER EMAIL */}
 
           <input
-            type="number"
-            name="receiverUserId"
-            placeholder="Receiver User ID"
-            value={formData.receiverUserId}
+            type="email"
+            name="receiverEmail"
+            placeholder="Receiver Email"
+            value={formData.receiverEmail}
             onChange={handleChange}
             required
           />
@@ -163,7 +270,7 @@ export default function Transfer() {
             required
           />
 
-          {/* EXPENSE CATEGORY */}
+          {/* CATEGORY */}
 
           <select
             name="description"
@@ -172,22 +279,31 @@ export default function Transfer() {
             className="dropdown"
           >
 
-            {expenseOptions.map((item, index) => (
+            {expenseOptions.map(
+              (item, index) => (
 
-              <option key={index} value={item}>
-                {item}
-              </option>
-            ))}
+                <option
+                  key={index}
+                  value={item}
+                >
+
+                  {item}
+
+                </option>
+              )
+            )}
 
           </select>
 
-          {/* SUBMIT BUTTON */}
+          {/* BUTTON */}
 
           <button type="submit">
 
-            {loading
-              ? "Processing..."
-              : "Transfer Money"}
+            {
+              loading
+                ? "Processing..."
+                : "Transfer Money"
+            }
 
           </button>
 

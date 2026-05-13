@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { getWallet } from "../api/api";
+import {
+  getWallet,
+
+  transferMoney
+} from "../api/api";
 
 export default function Debit() {
 
@@ -12,21 +16,29 @@ export default function Debit() {
 
   const [balance, setBalance] = useState(0);
 
+  const [currentUserEmail, setCurrentUserEmail] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
 
-    loadWallet();
+    loadData();
 
   }, []);
 
-  const loadWallet = async () => {
+  const loadData = async () => {
 
     try {
 
+      // FETCH WALLET
       const wallet = await getWallet();
 
       setBalance(wallet.balance);
+
+      // FETCH CURRENT USER
+      const profile = await getUserProfile();
+
+      setCurrentUserEmail(profile.email);
 
     } catch (err) {
 
@@ -34,14 +46,16 @@ export default function Debit() {
     }
   };
 
+  // EMAIL VALIDATION
+
   const validateEmail = (email) => {
 
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
 
-    // EMAIL EMPTY
+    // EMPTY EMAIL
 
     if (!email) {
 
@@ -55,6 +69,18 @@ export default function Debit() {
     if (!validateEmail(email)) {
 
       alert("Enter valid email address");
+
+      return;
+    }
+
+    // USER TRYING TO SEND TO SELF
+
+    if (
+      email.toLowerCase() ===
+      currentUserEmail.toLowerCase()
+    ) {
+
+      alert("You cannot transfer money to your own account");
 
       return;
     }
@@ -79,11 +105,17 @@ export default function Debit() {
 
     // SAVE TEMP DATA
 
-    localStorage.setItem("receiverEmail", email);
+    localStorage.setItem(
+      "receiverEmail",
+      email
+    );
 
-    localStorage.setItem("transferAmount", amount);
+    localStorage.setItem(
+      "transferAmount",
+      amount
+    );
 
-    // NAVIGATE TO VERIFY PIN
+    // GO TO VERIFY PIN PAGE
 
     navigate("/verify-pin");
   };
@@ -102,14 +134,18 @@ export default function Debit() {
         type="email"
         placeholder="Receiver Email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) =>
+          setEmail(e.target.value)
+        }
       />
 
       <input
         type="number"
         placeholder="Enter Amount"
         value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={(e) =>
+          setAmount(e.target.value)
+        }
       />
 
       <button onClick={handleContinue}>
