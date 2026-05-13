@@ -1,157 +1,224 @@
 import React, { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+ import { useNavigate } from "react-router-dom";
 
-import {
-  getWallet,
+ import {
+   getWallet,
+   getUserProfile
 
-  transferMoney
-} from "../api/api";
+ } from "../api/api";
 
-export default function Debit() {
 
-  const [email, setEmail] = useState("");
 
-  const [amount, setAmount] = useState("");
+ export default function Debit() {
 
-  const [balance, setBalance] = useState(0);
+   const [receiverEmail, setReceiverEmail] =
+     useState("");
 
-  const [currentUserEmail, setCurrentUserEmail] = useState("");
+   const [amount, setAmount] =
+     useState("");
 
-  const navigate = useNavigate();
+   const [balance, setBalance] =
+     useState(0);
 
-  useEffect(() => {
+   const [currentUserEmail, setCurrentUserEmail] =
+     useState("");
 
-    loadData();
+   const navigate = useNavigate();
 
-  }, []);
+   // =========================
+   // LOAD USER + WALLET
+   // =========================
 
-  const loadData = async () => {
+   useEffect(() => {
 
-    try {
+     loadData();
 
-      // FETCH WALLET
-      const wallet = await getWallet();
+   }, []);
 
-      setBalance(wallet.balance);
+   const loadData = async () => {
 
-      // FETCH CURRENT USER
-      const profile = await getUserProfile();
+     try {
 
-      setCurrentUserEmail(profile.email);
+       // WALLET
 
-    } catch (err) {
+       const wallet = await getWallet();
 
-      console.log(err);
-    }
-  };
+       setBalance(wallet.balance);
 
-  // EMAIL VALIDATION
+       // PROFILE
 
-  const validateEmail = (email) => {
+       const profile =
+         await getUserProfile();
 
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+       setCurrentUserEmail(
+         profile.email
+       );
 
-  const handleContinue = async () => {
+     } catch (err) {
 
-    // EMPTY EMAIL
+       console.log(err);
 
-    if (!email) {
+       alert("Failed to load data");
+     }
+   };
 
-      alert("Enter receiver email");
+   // =========================
+   // EMAIL VALIDATION
+   // =========================
 
-      return;
-    }
+   const validateEmail = (email) => {
 
-    // INVALID EMAIL
+     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+       .test(email);
+   };
 
-    if (!validateEmail(email)) {
+   // =========================
+   // CONTINUE
+   // =========================
 
-      alert("Enter valid email address");
+   const handleContinue = () => {
 
-      return;
-    }
+     // EMPTY EMAIL
 
-    // USER TRYING TO SEND TO SELF
+     if (!receiverEmail) {
 
-    if (
-      email.toLowerCase() ===
-      currentUserEmail.toLowerCase()
-    ) {
+       alert("Enter receiver email");
 
-      alert("You cannot transfer money to your own account");
+       return;
+     }
 
-      return;
-    }
+     // INVALID EMAIL
 
-    // INVALID AMOUNT
+     if (
+       !validateEmail(receiverEmail)
+     ) {
 
-    if (!amount || Number(amount) <= 0) {
+       alert(
+         "Enter valid email address"
+       );
 
-      alert("Enter valid amount");
+       return;
+     }
 
-      return;
-    }
+     // SELF TRANSFER
 
-    // INSUFFICIENT BALANCE
+     if (
+       receiverEmail.toLowerCase() ===
+       currentUserEmail.toLowerCase()
+     ) {
 
-    if (Number(amount) > Number(balance)) {
+       alert(
+         "You cannot transfer money to yourself"
+       );
 
-      alert("Insufficient Balance");
+       return;
+     }
 
-      return;
-    }
+     // INVALID AMOUNT
 
-    // SAVE TEMP DATA
+     if (
+       !amount ||
+       Number(amount) <= 0
+     ) {
 
-    localStorage.setItem(
-      "receiverEmail",
-      email
-    );
+       alert("Enter valid amount");
 
-    localStorage.setItem(
-      "transferAmount",
-      amount
-    );
+       return;
+     }
 
-    // GO TO VERIFY PIN PAGE
+     // BALANCE CHECK
 
-    navigate("/verify-pin");
-  };
+     if (
+       Number(amount) > Number(balance)
+     ) {
 
-  return (
+       alert("Insufficient Balance");
 
-    <div className="page">
+       return;
+     }
 
-      <h1>Send Money</h1>
+     // =========================
+     // SAVE TEMP DATA
+     // =========================
 
-      <h3>
-        Current Balance: ₹ {balance}
-      </h3>
+     localStorage.setItem(
+       "receiverEmail",
+       receiverEmail
+     );
 
-      <input
-        type="email"
-        placeholder="Receiver Email"
-        value={email}
-        onChange={(e) =>
-          setEmail(e.target.value)
-        }
-      />
+     localStorage.setItem(
+       "transferAmount",
+       amount
+     );
 
-      <input
-        type="number"
-        placeholder="Enter Amount"
-        value={amount}
-        onChange={(e) =>
-          setAmount(e.target.value)
-        }
-      />
+     // OPTIONAL
 
-      <button onClick={handleContinue}>
-        Continue
-      </button>
+     localStorage.setItem(
+       "description",
+       "Money Transfer"
+     );
 
-    </div>
-  );
-}
+     // =========================
+     // GO VERIFY PIN PAGE
+     // =========================
+
+     navigate("/verify-pin");
+   };
+
+   return (
+
+     <div className="page">
+
+       <div className="debit-card">
+
+         <h1>
+           Send Money
+         </h1>
+
+         <h3>
+           Current Balance:
+           ₹ {balance}
+         </h3>
+
+         {/* RECEIVER EMAIL */}
+
+         <input
+           type="email"
+           placeholder="Receiver Email"
+           value={receiverEmail}
+           onChange={(e) =>
+             setReceiverEmail(
+               e.target.value
+             )
+           }
+         />
+
+         {/* AMOUNT */}
+
+         <input
+           type="number"
+           placeholder="Enter Amount"
+           value={amount}
+           onChange={(e) =>
+             setAmount(
+               e.target.value
+             )
+           }
+         />
+
+         {/* BUTTON */}
+
+         <button
+           onClick={handleContinue}
+         >
+
+           Continue
+
+         </button>
+
+       </div>
+
+     </div>
+   );
+ }

@@ -279,33 +279,41 @@ export const creditMoney =
    DEBIT MONEY
 ====================================================== */
 
-export const debitMoney =
-  async (amount) => {
+/* ======================================================
+   DEBIT MONEY
+====================================================== */
 
-    const response = await fetch(
-      `${GATEWAY_URL}/wallet/${getUserId()}/debit?amount=${amount}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json",
+export const debitMoney = async (
+  userId,
+  amount
+) => {
 
-          Authorization:
-            `Bearer ${getToken()}`
-        },
+  const response = await fetch(
+    `${GATEWAY_URL}/wallet/${userId}/debit?amount=${amount}`,
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+
+        Authorization:
+          `Bearer ${getToken()}`
       }
-    );
-
-    const text =
-      await response.text();
-
-    if (!response.ok) {
-
-      throw new Error(text);
     }
+  );
 
-    return text;
-  };
+  const text =
+    await response.text();
+
+  if (!response.ok) {
+
+    throw new Error(
+      text || "Debit Failed"
+    );
+  }
+
+  return JSON.parse(text);
+};
 
 /* ======================================================
    SET PIN
