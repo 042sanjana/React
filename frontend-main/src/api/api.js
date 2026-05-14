@@ -481,3 +481,30 @@ export const logoutUser = () => {
 
   window.location.href = "/";
 };
+export const getWalletHistory =
+  async () => {
+
+    const response = await fetch(
+      `${GATEWAY_URL}/wallet/${getUserId()}/history`,
+      {
+        method: "GET",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Authorization:
+            `Bearer ${getToken()}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Failed to fetch wallet history"
+      );
+    }
+
+    return await response.json();
+  };

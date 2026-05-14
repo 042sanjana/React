@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
 import {
-  useNavigate
+  useNavigate,
+  useLocation
 } from "react-router-dom";
 
 import {
@@ -13,6 +14,9 @@ const VerifyPin = () => {
   const navigate =
     useNavigate();
 
+  const location =
+    useLocation();
+
   const [pin, setPin] =
     useState("");
 
@@ -23,79 +27,94 @@ const VerifyPin = () => {
     useState(false);
 
   // =========================
-  // SAVED PIN
+  // GET PAGE TYPE
+  // =========================
+
+  const type =
+    location.state?.type;
+
+  // =========================
+  // LOCAL STORAGE DATA
   // =========================
 
   const savedPin =
     localStorage.getItem("pin");
 
+  const amount =
+    localStorage.getItem("transferAmount");
+
+  const userId =
+    localStorage.getItem("userId");
+
+  const receiverEmail =
+    localStorage.getItem("receiverEmail");
+
   // =========================
-  // VERIFY PIN
+  // VERIFY
   // =========================
 
-  const handleVerify =
-    async () => {
+  const handleVerify = async () => {
+
+    try {
+
+      setLoading(true);
+
+      setError("");
 
       // EMPTY PIN
 
       if (!pin) {
 
-        setError(
-          "Enter PIN"
-        );
+        setError("Enter PIN");
 
         return;
       }
 
-      // INVALID PIN
+      // WRONG PIN
 
       if (pin !== savedPin) {
 
-        setError(
-          "Incorrect PIN"
-        );
+        setError("Incorrect PIN");
 
         return;
       }
 
-      try {
+      // =========================
+      // LOGIN FLOW
+      // =========================
 
-        setLoading(true);
+      if (type === "login") {
 
-        // =========================
-        // GET DATA
-        // =========================
+        alert("Login Successful");
 
-        const userId =
-          localStorage.getItem(
-            "userId"
-          );
+        navigate("/dashboard");
 
-        const amount =
-          localStorage.getItem(
-            "transferAmount"
-          );
+        return;
+      }
 
-        // =========================
-        // DEBIT MONEY
-        // =========================
+      // =========================
+      // DEBIT FLOW
+      // =========================
 
-        const response =
-          await debitMoney(
-            userId,
-            amount
-          );
+      if (type === "debit") {
 
-        console.log(
-          "DEBIT SUCCESS:",
-          response
+        if (!amount) {
+
+          setError("Amount missing");
+
+          return;
+        }
+
+        await debitMoney(
+          userId,
+          amount
         );
 
         alert(
-          "Amount Debited Successfully"
+          `₹ ${amount} debited successfully`
         );
 
-        // CLEAR TEMP DATA
+        // CLEAR STORAGE
 
         localStorage.removeItem(
           "transferAmount"
@@ -105,50 +124,68 @@ const VerifyPin = () => {
           "receiverEmail"
         );
 
-        localStorage.removeItem(
-          "description"
-        );
-
-        // REDIRECT
-
         navigate("/dashboard");
-
-      } catch (err) {
-
-        console.log(err);
-
-        setError(
-          err.message ||
-          "Debit Failed"
-        );
-
-      } finally {
-
-        setLoading(false);
       }
-    };
+
+    } catch (err) {
+
+      console.log(err);
+
+      setError(
+        err.message ||
+        "Verification Failed"
+      );
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
 
   return (
 
     <div className="auth-container">
 
       <h2>
-        Verify Your PIN
+        Verify PIN
       </h2>
+
+      {
+        type === "debit" && (
+
+          <>
+
+            <p>
+              Receiver:
+              <strong>
+                {" "}
+                {receiverEmail}
+              </strong>
+            </p>
+
+            <p>
+              Amount:
+              <strong>
+                {" "}
+                ₹ {amount}
+              </strong>
+            </p>
+
+          </>
+        )
+      }
 
       <input
         type="password"
+        placeholder="Enter PIN"
         maxLength="6"
-        placeholder="Enter your 6-digit PIN"
         value={pin}
         onChange={(e) =>
           setPin(e.target.value)
         }
       />
 
-      <button
-        onClick={handleVerify}
-      >
+      <button onClick={handleVerify}>
 
         {
           loading
@@ -158,14 +195,16 @@ const VerifyPin = () => {
 
       </button>
 
-      {error && (
+      {
+        error && (
 
-        <p style={{ color: "red" }}>
+          <p style={{ color: "red" }}>
 
-          {error}
+            {error}
 
-        </p>
-      )}
+          </p>
+        )
+      }
 
     </div>
   );

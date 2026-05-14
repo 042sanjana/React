@@ -163,7 +163,11 @@ import React, { useEffect, useState } from "react";
      // GO VERIFY PIN PAGE
      // =========================
 
-     navigate("/verify-pin");
+     navigate("/verify-pin", {
+       state: {
+         type: "debit"
+       }
+     });
    };
 
    return (

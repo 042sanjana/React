@@ -15,13 +15,15 @@ export default function Sidebar() {
       <Link to="/credit">➕ Credit</Link>
 
       <Link to="/debit">💸 Debit</Link>
+      <Link to="/wallet-history">📜 History</Link>
 
-<Link to="/expenseChart"> Expenses</Link>
+      <Link to="/expenseChart">📊 Expense Chart</Link>
       <Link to="/profile">👤 Profile</Link>
 
       <Link to="/Transfer ">💳 Transfer</Link>
 
      <Link to="/Transaction ">💳 Transaction </Link>
+
 
     </div>
   );

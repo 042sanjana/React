@@ -17,7 +17,11 @@ function Login() {
       });
 
       alert("Login successful");
-      navigate("/verify-pin");
+      navigate("/verify-pin", {
+        state: {
+          type: "login"
+        }
+      });
 
     } catch (error) {
       console.error(error);

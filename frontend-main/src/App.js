@@ -38,6 +38,7 @@ import "./Login.css";
 import "./components/WalletCard.css";
 import "./pages/Profile.css";
 import "./pages/Dashboard.css";
+import WalletHistory from "./pages/WalletHistory";
 
 
 // NEW CSS
@@ -121,6 +122,10 @@ function Layout() {
           <Route path="/dashboard" element={<Dashboard />} />
 
 <Route path="/expenseChart" element={<ExpenseChart />} />
+<Route
+  path="/wallet-history"
+  element={<WalletHistory />}
+/>
 
           <Route path="/credit" element={<Credit />} />
 
