@@ -1,0 +1,48 @@
+.transaction-list {
+  margin-top: 30px;
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.list-header input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+table {
+  width: 100%; border-collapse: collapse;
+              }
+
+              th,
+              td {
+                padding: 14px;
+                text-align: center;
+              }
+
+              th {
+                background: #1e3c72;
+                color: white;
+              }
+
+              tr:nth-child(even) {
+                background: #f5f7fa;
+              }
+
+              .SUCCESS {
+                color: green;
+                font-weight: bold;
+              }
+
+              .FAILED {
+                color: red;
+                font-weight: bold;
+              }

@@ -1,0 +1,139 @@
+.wallet-history-page {
+
+  min-height: 100vh;
+
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1e293b
+  );
+
+  padding: 40px 20px;
+}
+
+.wallet-history-container {
+
+  max-width: 900px;
+
+  margin: auto;
+}
+
+.wallet-history-title {
+
+  color: white;
+
+  font-size: 38px;
+
+  font-weight: 700;
+
+  margin-bottom: 30px;
+
+  text-align: center;
+}
+
+.wallet-history-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+.wallet-history-card {
+
+  background: rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(10px);
+
+  border-radius: 20px;
+
+  padding: 24px;
+
+  color: white;
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,0.25);
+
+  transition: 0.3s;
+}
+
+.wallet-history-card:hover {
+
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 15px 30px rgba(0,0,0,0.35);
+}
+
+.wallet-history-top {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 15px;
+}
+
+.wallet-history-top h2 {
+
+  margin: 0;
+
+  font-size: 28px;
+}
+
+.wallet-history-top p {
+
+  opacity: 0.8;
+
+  margin-top: 6px;
+}
+
+.credit-badge {
+
+  background: #22c55e;
+
+  padding: 8px 18px;
+
+  border-radius: 50px;
+
+  font-weight: bold;
+}
+
+.debit-badge {
+
+  background: #ef4444;
+
+  padding: 8px 18px;
+
+  border-radius: 50px;
+
+  font-weight: bold;
+}
+
+.wallet-history-bottom {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  opacity: 0.8;
+
+  font-size: 14px;
+}
+
+.loading-text,
+.empty-text {
+
+  color: white;
+
+  text-align: center;
+
+  font-size: 20px;
+
+  margin-top: 50px;
+}
