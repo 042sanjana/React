@@ -1,0 +1,82 @@
+.history-page {
+  min-height: 100vh;
+  background: #f4f7fb;
+  padding: 40px;
+}
+
+.history-container {
+  max-width: 1000px;
+  margin: auto;
+}
+
+.history-title {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #1e293b;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.history-card {
+  background: white;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.history-card:hover {
+  transform: translateY(-3px);
+}
+
+.history-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-top h3 {
+  font-size: 28px;
+  color: #0f172a;
+}
+
+.history-top p {
+  color: #64748b;
+  margin-top: 5px;
+}
+
+.status {
+  padding: 8px 14px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.SUCCESS {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.FAILED {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.history-bottom {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  color: #475569;
+}
+
+.loading-text,
+.empty-text {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 40px;
+}

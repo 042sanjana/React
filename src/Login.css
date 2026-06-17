@@ -1,0 +1,334 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ================= FULL PAGE ================= */
+
+body {
+  background:
+    radial-gradient(circle at top left,
+      rgba(0, 162, 255, 0.25),
+      transparent 30%),
+
+    radial-gradient(circle at bottom right,
+      rgba(153, 0, 255, 0.20),
+      transparent 30%),
+
+    linear-gradient(
+      135deg,
+      #040816 0%,
+      #0b1026 45%,
+      #0d081b 100%
+    );
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 40px 20px;
+}
+
+/* ================= MAIN CONTAINER ================= */
+
+.auth-container {
+  width: 100%;
+  max-width: 520px;
+
+  padding: 45px;
+
+  border-radius: 32px;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 20px 50px rgba(0,0,0,0.55),
+    0 0 40px rgba(0,140,255,0.08);
+
+  display: flex;
+  flex-direction: column;
+
+  color: white;
+
+  position: relative;
+  overflow: hidden;
+
+  animation: fadeIn 0.7s ease;
+}
+
+/* Glass shine */
+
+.auth-container::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: 32px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.08),
+    transparent 40%,
+    transparent 60%,
+    rgba(255,255,255,0.04)
+  );
+
+  pointer-events: none;
+}
+
+/* ================= HEADING ================= */
+
+.auth-container h2 {
+  text-align: center;
+  font-size: 44px;
+  font-weight: 700;
+  color: white;
+
+  margin-bottom: 35px;
+
+  position: relative;
+}
+
+.auth-container h2::after {
+  content: "";
+
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  bottom: -12px;
+
+  width: 90px;
+  height: 4px;
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    90deg,
+    #3b82f6,
+    #8b5cf6
+  );
+}
+
+/* ================= INPUTS ================= */
+
+.auth-container input {
+  width: 100%;
+
+  padding: 16px 18px;
+
+  margin: 10px 0;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+
+  outline: none;
+
+  background: rgba(255,255,255,0.10);
+
+  color: white;
+
+  font-size: 15px;
+
+  transition: 0.3s ease;
+}
+
+/* Placeholder */
+
+.auth-container input::placeholder {
+  color: rgba(255,255,255,0.65);
+}
+
+/* Focus */
+
+.auth-container input:focus {
+  border-color: rgba(59,130,246,0.5);
+
+  background: rgba(255,255,255,0.14);
+
+  box-shadow:
+    0 0 0 3px rgba(59,130,246,0.12),
+    0 10px 20px rgba(0,0,0,0.15);
+
+  transform: translateY(-2px);
+}
+
+/* ================= PHONE CONTAINER ================= */
+
+.phone-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  width: 100%;
+  margin: 10px 0;
+}
+
+/* Dropdown */
+
+.phone-container select {
+  width: 110px;
+  min-width: 110px;
+
+  padding: 16px 12px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+
+  outline: none;
+
+  background: rgba(255,255,255,0.12);
+
+  color: white;
+
+  font-size: 14px;
+
+  transition: 0.3s ease;
+
+  cursor: pointer;
+}
+
+/* Dropdown options */
+
+.phone-container select option {
+  background: #111827;
+  color: white;
+}
+
+/* Dropdown focus */
+
+.phone-container select:focus {
+  border-color: rgba(59,130,246,0.5);
+
+  box-shadow:
+    0 0 0 3px rgba(59,130,246,0.12);
+}
+
+/* Phone input */
+
+.phone-container input {
+  flex: 1;
+  margin: 0;
+}
+
+/* ================= BUTTON ================= */
+
+.auth-container button {
+  width: 100%;
+
+  margin-top: 20px;
+
+  padding: 16px;
+
+  border-radius: 16px;
+  border: none;
+
+  cursor: pointer;
+
+  background: linear-gradient(
+    135deg,
+    #06b6d4,
+    #2563eb,
+    #7c3aed
+  );
+
+  color: white;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  transition: 0.35s ease;
+
+  box-shadow:
+    0 10px 25px rgba(37,99,235,0.35);
+}
+
+/* Button hover */
+
+.auth-container button:hover {
+  transform: translateY(-3px) scale(1.01);
+
+  box-shadow:
+    0 15px 35px rgba(37,99,235,0.45);
+}
+
+/* ================= FOOTER TEXT ================= */
+
+.auth-container p {
+  text-align: center;
+
+  margin-top: 24px;
+
+  color: rgba(255,255,255,0.72);
+
+  font-size: 15px;
+
+  transition: 0.3s ease;
+
+  cursor: pointer;
+}
+
+.auth-container p:hover {
+  color: white;
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+
+  body {
+    padding: 20px;
+  }
+
+  .auth-container {
+    padding: 30px 22px;
+    border-radius: 24px;
+  }
+
+  .auth-container h2 {
+    font-size: 34px;
+  }
+
+  .phone-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .phone-container select {
+    width: 100%;
+  }
+}
